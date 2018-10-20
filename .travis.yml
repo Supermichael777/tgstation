@@ -3,10 +3,12 @@ sudo: false
 branches:
   except:
   - ___TGS3TempBranch
+  - ___TGSTempBranch
 matrix:
   include:
     - env:
       - BUILD_TOOLS=true
+      name: "Build Tools"
       addons:
         apt:
           packages:
@@ -18,6 +20,7 @@ matrix:
     - env:
       - BUILD_TESTING=true
       - BUILD_TOOLS=false
+      name: "Build All Maps"
       addons:
         apt:
           packages:
@@ -28,6 +31,7 @@ matrix:
     - env:
       - BUILD_TESTING=false
       - BUILD_TOOLS=false
+      name: "Build and Run Unit Tests"
       addons:
         mariadb: '10.2'
         apt:

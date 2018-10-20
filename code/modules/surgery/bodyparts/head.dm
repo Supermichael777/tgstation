@@ -11,6 +11,8 @@
 	throw_range = 2 //No head bowling
 	px_x = 0
 	px_y = -8
+	stam_damage_coeff = 1
+	max_stamina_damage = 100
 
 	var/mob/living/brain/brainmob = null //The current occupant.
 	var/obj/item/organ/brain/brain = null //The brain organ
@@ -32,11 +34,11 @@
 	var/lip_color = "white"
 
 /obj/item/bodypart/head/can_dismember(obj/item/I)
-	if(!(owner.stat == DEAD))
+	if(!((owner.stat == DEAD) || owner.InFullCritical()))
 		return FALSE
 	return ..()
 
-/obj/item/bodypart/head/drop_organs(mob/user)
+/obj/item/bodypart/head/drop_organs(mob/user, violent_removal)
 	var/turf/T = get_turf(src)
 	if(status != BODYPART_ROBOTIC)
 		playsound(T, 'sound/misc/splort.ogg', 50, 1, -1)
@@ -49,6 +51,8 @@
 				brainmob.forceMove(brain)
 				brain.brainmob = brainmob
 				brainmob = null
+			if(violent_removal && prob(rand(80, 100))) //ghetto surgery can damage the brain.
+				brain.damaged_brain = TRUE
 			brain.forceMove(T)
 			brain = null
 			update_icon_dropped()

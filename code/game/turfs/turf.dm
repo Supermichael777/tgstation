@@ -31,6 +31,8 @@
 	var/bullet_sizzle = FALSE //used by ammo_casing/bounce_away() to determine if the shell casing should make a sizzle sound when it's ejected over the turf
 							//IE if the turf is supposed to be water, set TRUE.
 
+	var/tiled_dirt = FALSE // use smooth tiled dirt decal
+
 /turf/vv_edit_var(var_name, new_value)
 	var/static/list/banned_edits = list("x", "y", "z")
 	if(var_name in banned_edits)
@@ -424,7 +426,9 @@
 	return
 
 /turf/handle_fall(mob/faller, forced)
-	faller.lying = pick(90, 270)
+	if(isliving(faller))
+		var/mob/living/L = faller
+		L.lying = pick(90, 270)
 	if(!forced)
 		return
 	if(has_gravity(src))
